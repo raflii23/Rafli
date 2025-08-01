@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Love You Dede</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            animation: rotateHeart 20s linear infinite; /* Animasi berputar */
+        }
+
+        @keyframes rotateHeart {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .text-heart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .text-heart span {
+            position: absolute;
+            font-size: 14px;
+            color: #ff69b4; /* Warna pink */
+            font-weight: bold;
+            opacity: 0.8;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+            animation: pulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="heart-container">
+    <div class="text-heart" id="heartTextContainer"></div>
+</div>
+
+<script>
+    const heartTextContainer = document.getElementById('heartTextContainer');
+    const textToRepeat = "I love you Dede";
+    const numberOfTexts = 10;
+
+    function createHeartShape() {
+        for (let i = 0; i < numberOfTexts; i++) {
+            const span = document.createElement('span');
+            span.textContent = textToRepeat;
+
+            let x, y;
+            let pointInHeart = false;
+            let attempts = 0;
+
+            // Generate random points until one is inside the heart shape
+            while (!pointInHeart && attempts < 100) {
+                // Generate random coordinates within the container
+                x = Math.random() * 350;
+                y = Math.random() * 350;
+
+                // Heart shape equation
+                const centerX = 175;
+                const centerY = 175;
+                const normalizedX = (x - centerX) / 160;
+                const normalizedY = (y - centerY) / 160;
+
+                const heartEquation = Math.pow(normalizedX, 2) + Math.pow(normalizedY, 2) - Math.abs(normalizedX) * normalizedY;
+                
+                if (heartEquation < 0.2) {
+                    pointInHeart = true;
+                }
+                attempts++;
+            }
+
+            if (pointInHeart) {
+                span.style.left = `${x}px`;
+                span.style.top = `${y}px`;
+                // Randomly rotate each text element for a more scattered look
+                span.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+                // Add a random delay to the pulse animation
+                span.style.animationDelay = `${Math.random() * 3}s`;
+                heartTextContainer.appendChild(span);
+            }
+        }
+    }
+
+    createHeartShape();
+</script>
+
+</body>
+</html>
